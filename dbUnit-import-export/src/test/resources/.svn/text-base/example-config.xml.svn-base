@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd">
+
+	<description>Example configuration to unit testing.</description>
+
+	<!-- For unit testing use a memory database as HSQL DB -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<constructor-arg index="0">
+			<bean class="org.hsqldb.jdbcDriver"/>
+		</constructor-arg>
+		<constructor-arg index="1" value="jdbc:hsqldb:file:target/db/entity_hsqldb"/>
+		<constructor-arg index="2" value="sa"/>
+		<constructor-arg index="3" value=""/>
+	</bean>
+
+	<jdbc:initialize-database data-source="dataSource">
+		<jdbc:script location="classpath:db/db.sql" />
+	</jdbc:initialize-database>
+	
+</beans>

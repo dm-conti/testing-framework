@@ -1,0 +1,27 @@
+package test;
+
+import java.io.FileOutputStream;
+import java.sql.DriverManager;
+import java.sql.Connection;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.database.QueryDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
+
+public class DatabaseExportSample
+{
+    public static void main(String[] args) throws Exception
+    {
+        // database connection
+        Connection jdbcConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/employees", "root", "root");
+        IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
+        
+        // partial database export
+        QueryDataSet partialDataSet = new QueryDataSet(connection);
+        partialDataSet.addTable("employees","SELECT * FROM employees LIMIT 0,1000");
+        partialDataSet.addTable("departments","SELECT * FROM departments LIMIT 0,1000");
+        partialDataSet.addTable("salaries","SELECT * FROM salaries LIMIT 0,1000");
+        FlatXmlDataSet.write(partialDataSet, new FileOutputStream("partial.xml"));   
+        
+    }
+}
